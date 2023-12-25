@@ -1,0 +1,76 @@
+{% extends 'accounts/profile.html' %}
+
+{% block profile %}
+  <div class="col-md-9 mx-auto ">
+    <div id="profile-section ">
+      <!-- Display Profile Photo -->
+      <div class="text-center mb-4 mt-4">
+        {% if user.profile.profile_image %}
+          <img src="{{ user.profile.profile_image.url }}" alt="Profile Image" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
+        {% else %}
+          <!-- Default profile image if no image is set -->
+          <img src="/media/img/profilephoto.png" alt="Default Profile Image" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
+        {% endif %}
+      </div>
+
+      <!-- Main Profile Form -->
+      <form id="main-profile-form" method="post" class="mb-4" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- Change Profile Image Section -->
+        <div class="row">
+          <div class="col-md-12 mx-auto">
+            <div class="form-group">
+              <label for="profile_image">Change Profile Image:</label>
+              <input type="file" class="custom-file-input" id="profile_image" name="profile_image" accept="image/*">
+              <label class="custom-file-label" for="profile_image">Choose file</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Other Profile Information -->
+        <div class="row">
+          <div class="col-md-6 mx-auto">
+            <div class="form-group">
+              <label for="first_name">First Name:</label>
+              <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" class="form-control" required>
+            </div>
+          </div>
+          <div class="col-md-6 mx-auto">
+            <div class="form-group">
+              <label for="last_name">Last Name:</label>
+              <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" class="form-control" required>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mx-auto">
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" id="email" name="email" value="{{ user.email }}" class="form-control" required>
+            </div>
+          </div>
+          <div class="col-md-6 mx-auto">
+            <div class="form-group">
+              <label for="contact_number">Contact Number:</label>
+              <input type="text" id="contact_number" name="contact_number" value="{{ user.profile.contact_number }}" class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <!-- Update Profile Button -->
+        <div class="row">
+          <div class="col-md-12 mx-auto">
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Update Password Button -->
+      <div class="row">
+        <div class="col-md-12 mx-auto">
+          <a type="submit" href="/accounts/password_update" class="btn btn-success">Update Password</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

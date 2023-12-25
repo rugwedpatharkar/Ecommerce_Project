@@ -1,0 +1,359 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="icon" type="image/png" href="/media/img/favicon.ico" />
+    <title>GadgetGalaxy</title>
+
+    <!-- Bootstrap CSS Link -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      .card-title {
+        flex: 1; 
+        margin-bottom: 0px; 
+      }
+      .card {
+        transition: transform 0.2s ease-in-out;
+        position: relative;
+      }
+  
+      .card:hover {
+        transform: scale(1.05);
+      }
+  
+      .card-img-top {
+        max-height: 150px; /* Adjust the maximum height of the image */
+        object-fit: contain; /* Maintain the image aspect ratio */
+        margin-bottom: 10px; /* Add margin to the bottom of the image */
+      }
+  
+      .card-body {
+        height: 100%;
+      }
+      .dropdown button {
+        color: #f8f9fa;
+        pointer-events: none;
+      }
+
+      .dropdown button:focus {
+        box-shadow: none; /* Remove on-click box-shadow */
+      }
+
+      /* Ensure the dropdowns are visible */
+      .dropdown-menu {
+        background-color: #343a40; /* Set dropdown background color */
+      }
+
+      .dropdown-item {
+        color: #ffffff; /* Set dropdown item text color */
+      }
+
+      /* Ensure proper display of dropdowns */
+      .dropdown:hover .dropdown-menu {
+        display: block;
+      }
+      body {
+        font-size: 16px; /* Set the default font size for the body */
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        font-size: 1.5em; /* Adjust the font size for headings */
+      }
+
+      p {
+        font-size: 1em; /* Adjust the font size for paragraphs */
+      }
+
+      .btn {
+        font-size: 0.875em; /* Adjust the font size for buttons */
+      }
+
+      /* Add rules for other common elements */
+      a {
+        font-size: 1em; /* Adjust the font size for links */
+      }
+
+      label {
+        font-size: 1em; /* Adjust the font size for labels */
+      }
+
+      input, select, textarea {
+        font-size: 1em; /* Adjust the font size for form elements */
+      }
+    </style>
+  </head>
+  <body>
+    <nav
+      class="navbar navbar-expand-md navbar-light"
+      style="background-color: #343a40"
+    >
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/" style="color: white;font-size:18px">
+          <img src="/media/img/favicon.ico" />
+           GadgetGalaxy
+        </a>
+
+        <!-- Add this div to wrap the collapsible content -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <form
+            class="w-25"
+            action="{% url 'home' %}"
+            method="get"
+          >
+            <div class="input-group">
+              <input
+                class="form-control"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                name="q"
+                value="{{ request.GET.q }}"
+              />
+              <div class="input-group-append">
+                <button class="btn btn-warning" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg></button>
+              </div>
+            </div>
+          </form>
+          <li class="nav-item">
+            <a class="btn btn-light"style="margin-right: 10px" href="/products/categories/">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" id="category"><g fill="none" fill-rule="evenodd" stroke="#200E32" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" transform="translate(2 2)"><path d="M14.2855094 9.76996262e-15L17.5521036 9.76996262e-15C18.9036211 9.76996262e-15 20 1.10589743 20 2.47018211L20 5.76410278C20 7.12735391 18.9036211 8.23428489 17.5521036 8.23428489L14.2855094 8.23428489C12.9329672 8.23428489 11.8365883 7.12735391 11.8365883 5.76410278L11.8365883 2.47018211C11.8365883 1.10589743 12.9329672 9.76996262e-15 14.2855094 9.76996262e-15zM2.44892104 9.76996262e-15L5.71449064 9.76996262e-15C7.06703281 9.76996262e-15 8.16341169 1.10589743 8.16341169 2.47018211L8.16341169 5.76410278C8.16341169 7.12735391 7.06703281 8.23428489 5.71449064 8.23428489L2.44892104 8.23428489C1.09637888 8.23428489 3.55271368e-15 7.12735391 3.55271368e-15 5.76410278L3.55271368e-15 2.47018211C3.55271368e-15 1.10589743 1.09637888 9.76996262e-15 2.44892104 9.76996262e-15zM2.44892104 11.7657151L5.71449064 11.7657151C7.06703281 11.7657151 8.16341169 12.8716125 8.16341169 14.2369308L8.16341169 17.5298179C8.16341169 18.8941026 7.06703281 20 5.71449064 20L2.44892104 20C1.09637888 20 3.55271368e-15 18.8941026 3.55271368e-15 17.5298179L3.55271368e-15 14.2369308C3.55271368e-15 12.8716125 1.09637888 11.7657151 2.44892104 11.7657151zM14.2855094 11.7657151L17.5521036 11.7657151C18.9036211 11.7657151 20 12.8716125 20 14.2369308L20 17.5298179C20 18.8941026 18.9036211 20 17.5521036 20L14.2855094 20C12.9329672 20 11.8365883 18.8941026 11.8365883 17.5298179L11.8365883 14.2369308C11.8365883 12.8716125 12.9329672 11.7657151 14.2855094 11.7657151z"></path></g></svg>
+              Categories
+             
+            </a>
+          </li>
+          <div class="ml-auto">
+            <ul class="navbar-nav">
+              <!-- User Authentication Dropdown -->
+              {% if user.is_authenticated %}
+              <li class="nav-item dropdown" >
+  <button
+    class=" nav-link "
+    id="navbarDropdown"
+    data-toggle="dropdown"
+    aria-haspopup="true"
+    aria-expanded="false"
+    style="color: #ffffff"
+  >
+    <div class="d-flex align-items-center">
+      {% if user.profile.profile_image %}
+        <img src="{{ user.profile.profile_image.url }}" alt="Profile Image" class="img-fluid rounded-circle mr-2" style="width: 30px; height: 30px;">
+      {% else %}
+        <!-- Default profile image if no image is set -->
+        <img src="/media/img/profilephoto.png" alt="Default Profile Image" class="img-fluid rounded-circle mr-2" style="width: 30px; height: 30px;">
+      {% endif %}
+      {{ user.first_name }} {{ user.last_name }}
+      <i class="fa fa-angle-down" aria-hidden="true"></i>
+    </div>
+  </button>
+  <div
+    class="dropdown-menu dropdown-menu-end" 
+    aria-labelledby="navbarDropdown"
+  >
+    <a class="dropdown-item" href="/accounts/profile_section">Profile</a>
+    <a class="dropdown-item" href="/accounts/logout">Logout</a>
+  </div>
+</li>
+<li class="nav-item">
+  <a class="btn btn-danger" style="margin-right: 10px" href="/transactions/show-liked-items/">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+      <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+    </svg>
+    Item 
+    {% if liked_items_count > 0 %}
+      <span style="color:black" class="badge badge-light">{{ liked_items_count }}</span>
+    {% endif %}
+  </a>
+</li>
+<li class="nav-item">
+  <a class="btn btn-success"style="margin-right: 10px" href="/transactions/view-orders/">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
+      <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>
+      <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0M7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0"/>
+    </svg>
+    Orders
+    {% if ordered_items_count > 0 %}
+    <span style="color:black" class="badge badge-light">{{ ordered_items_count }}</span>
+  {% endif %}
+  </a>
+</li>
+<li class="nav-item">
+  <a class="btn btn-warning" href="/transactions/view-cart/">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+      <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+    </svg>
+    Cart
+    {% if cart_items_count > 0 %}
+      <span style="color:black" class="badge badge-light">{{ cart_items_count }}</span>
+    {% endif %}
+  </a>
+</li>
+              {% else %}
+              <li class="nav-item">
+                <a
+                  href="/accounts/login"
+                  class="btn btn-primary"
+                  style="margin-right: 10px"
+                  >Login</a
+                >
+              </li>
+             
+              {% endif %}
+
+             
+
+              <!-- Cart Icon -->
+              
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid" style="background-color: #000000">
+      <div class="row">
+        <!-- Dropdown 1 -->
+        <div class="col-md">
+          <div class="dropdown">
+            <button
+              class="btn dropdown-toggle"
+              type="button"
+              id="dropdownMenu1"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Smartphones and Accessories
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='smartphones' %}">Smartphones</a>
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='phone-cases-and-covers' %}">Phone cases and covers</a>
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='screen-protectors' %}">Screen protectors</a>
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='charging-cables-and-adapters' %}">Charging cables and adapters</a>
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='power-banks' %}">Power banks</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md">
+          <div class="dropdown">
+            <button
+              class="btn dropdown-toggle"
+              type="button"
+              id="dropdownMenu2"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Laptops and Computers
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='laptops' %}">Laptops</a>
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='desktop-computers' %}">Desktop computers</a>
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='computer-accessories' %}">Computer accessories</a>
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='laptop-bags-and-sleeves' %}">Laptop bags and sleeves</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md">
+          <div class="dropdown">
+            <button
+              class="btn dropdown-toggle"
+              type="button"
+              id="dropdownMenu3"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Audio Devices
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='headphones' %}">Headphones</a>
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='earphones' %}">Earphones</a>
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='bluetooth-speakers' %}">Bluetooth speakers</a>
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='soundbars' %}">Soundbars</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dropdown 4 -->
+        <div class="col-md">
+          <div class="dropdown">
+            <button
+              class="btn dropdown-toggle"
+              type="button"
+              id="dropdownMenu4"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Wearables
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='smartwatches' %}">Smartwatches</a>
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='fitness-trackers' %}">Fitness trackers</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dropdown 5 -->
+        <div class="col-md">
+          <div class="dropdown">
+            <button
+              class="btn dropdown-toggle"
+              type="button"
+              id="dropdownMenu5"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Gaming Gadgets
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu5">
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='gaming-consoles' %}">Gaming consoles</a>
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='gaming-laptops-and-pcs' %}">Gaming laptops and PCs</a>
+              <a class="dropdown-item" href="{% url 'category_product_list' category_slug='gaming-accessories' %}">Gaming accessories</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include "base/alert.html" %}
+
+    {% block start %} 
+    {% endblock %}
+
+    <!-- Bootstrap JS and Popper.js Links (required for Bootstrap components like dropdowns) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+  </body>
+</html>

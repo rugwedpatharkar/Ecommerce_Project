@@ -1,0 +1,110 @@
+{% extends 'base/base.html' %} 
+{% load custom_filters %} 
+{% block start %}
+  <div class="container">
+    <h2>Order Items</h2>
+    
+    <form method="post" action="{% url 'transactions:place_order' %}">
+      {% csrf_token %}
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cart_item in cart_items %}
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img src="{{ cart_item.product.image.url }}" alt="{{ cart_item.product.title }}" class="cart-item-image">
+                  <span class="ml-2">{{ cart_item.product.title }}</span>
+                </div>
+              </td>
+              <td>
+                <input
+                  type="number"
+                  class="form-control quantity-input"
+                  name="quantity_{{ cart_item.id }}"  
+                  value="{{ cart_item.quantity }}"
+                  min="1"
+                  max="99"
+                />
+              </td>
+              <td class="price">₹{{ cart_item.product.price }}</td>
+              <td class="total">
+                ₹{{ cart_item.product.price|multiply:cart_item.quantity|floatformat:2 }}
+              </td>
+              <td>
+                <a
+                  href="{% url 'transactions:remove_from_cart' cart_item.id %}"
+                  class="btn btn-danger remove-link"
+                >
+                  Remove
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      
+
+      <h3>Select Payment Option:</h3>
+      <label for="payment_option">Payment Option:</label>
+      <select name="payment_option" id="payment_option" required>
+        {% for card in cards %}
+          <option value="{{ card.id }}">Card - {{ card.name_on_card }}</option>
+        {% endfor %}
+        {% for upi_id in upi_ids %}
+          <option value="{{ upi_id.id }}">UPI ID - {{ upi_id.upiId }}</option>
+        {% endfor %}
+        <option value="cash on delivery">Cash On Delivery</option>
+      </select>
+
+      <h3>Select Shipping Address:</h3>
+      <label for="shipping_address">Shipping Address:</label>
+      <select name="shipping_address" id="shipping_address" required>
+        {% for address in shipping_addresses %}
+          <option value="{{ address.id }}">{{ address.address_line1 }}, {{ address.city }}, {{ address.state }} - {{ address.postal_code }}</option>
+        {% endfor %}
+      </select>
+
+      <button type="submit" class="btn btn-primary">Place Order</button>
+    </form>
+
+  </div>
+  <script>
+    // Add event listeners to update totals dynamically
+    document.addEventListener("DOMContentLoaded", function () {
+      const quantityInputs = document.querySelectorAll(".quantity-input");
+      quantityInputs.forEach(function (input) {
+        input.addEventListener("input", function () {
+          updateCartItemTotal(input);
+          updateTotalAmount();
+        });
+      });
+    });
+
+    function updateCartItemTotal(input) {
+      const cartItemRow = input.closest(".cart-item-row");
+      const quantity = parseInt(input.value, 10);
+      const price = parseFloat(cartItemRow.querySelector(".price").textContent.replace('₹', ''));
+      const totalElement = cartItemRow.querySelector(".total");
+      const total = quantity * price;
+      totalElement.textContent = `₹${total.toFixed(2)}`;
+    }
+
+    function updateTotalAmount() {
+      const totalAmountElement = document.getElementById("total-amount");
+      const totalAmount = Array.from(document.querySelectorAll(".total"))
+        .map((element) => parseFloat(element.textContent.replace('₹', '')))
+        .reduce((sum, value) => sum + value, 0);
+      totalAmountElement.textContent = `₹${totalAmount.toFixed(2)}`;
+    }
+  </script>
+{% endblock %}

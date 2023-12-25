@@ -1,0 +1,54 @@
+<!-- accounts/add_address.html -->
+{% extends 'accounts/profile.html' %}
+
+{% block profile %}
+  <div class="container-fluid mt-5">
+    <!-- Display added addresses section -->
+    <h2>Your Addresses</h2>
+    <form method="post"  id="delete-address-form">
+      {% csrf_token %}
+      {% if addresses %}
+        <ul class="list-group">
+          {% for address in addresses %}
+            <li class="list-group-item">
+              <input type="checkbox" name="addresses_to_delete" value="{{ address.id }}">
+              {{ address.address_line1 }}, {{ address.city }}, {{ address.state }}, {{ address.postal_code }}, {{ address.country }}
+            </li>
+          {% endfor %}
+        </ul>
+        <button type="submit" class="btn btn-danger mt-3">Delete Selected</button>
+      {% else %}
+        <p>No addresses added yet.</p>
+      {% endif %}
+    
+      <!-- Add Shipping Address Form -->
+      <h2 class="mt-5">Add Shipping Address</h2>
+     
+      <div class="mb-3">
+        <label for="id_address_line1" class="form-label">Address Line 1:</label>
+        <input type="text" name="address_line1" id="id_address_line1" class="form-control" >
+      </div>
+      <div class="mb-3">
+        <label for="id_address_line2" class="form-label">Address Line 2:</label>
+        <input type="text" name="address_line2" id="id_address_line2" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="id_city" class="form-label">City:</label>
+        <input type="text" name="city" id="id_city" class="form-control" >
+      </div>
+      <div class="mb-3">
+        <label for="id_state" class="form-label">State:</label>
+        <input type="text" name="state" id="id_state" class="form-control" >
+      </div>
+      <div class="mb-3">
+        <label for="id_postal_code" class="form-label">Postal Code:</label>
+        <input type="text" name="postal_code" id="id_postal_code" class="form-control" >
+      </div>
+      <div class="mb-3">
+        <label for="id_country" class="form-label">Country:</label>
+        <input type="text" name="country" id="id_country" class="form-control" >
+      </div>
+      <button type="submit" class="btn btn-primary">Add Address</button>
+    </form>
+  </div>
+{% endblock %}

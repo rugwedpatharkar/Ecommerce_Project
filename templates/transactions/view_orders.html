@@ -1,0 +1,93 @@
+{% extends 'accounts/profile.html' %}
+{% block profile %}
+  <div class="container-fluid mt-4">
+    <h2 class="mb-4">Your Orders</h2>
+    {% if orders %}
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Unit Price</th>
+              <th>Total Amount</th>
+              <th>Payment Status</th>
+              <th>Delivery Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in orders %}
+              <tr>
+                <td>{{ order.product.title }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>₹{{ order.unit_price }}</td>
+                <td>₹{{ order.total_price|floatformat:2 }}</td>
+                <td>
+                  <span class="badge {% if order.payment_status == 'paid' %}badge-success{% else %}badge-danger{% endif %}">
+                    {{ order.get_payment_status_display }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge {% if order.status == 'delivered' %}badge-success{% else %}badge-info{% endif %}">
+                    {{ order.get_status_display }}
+                  </span>
+                </td>
+                <td>
+                  {% if order.status == 'delivered' %}
+                    <a href="{% url 'transactions:download_invoice' order.id %}" class="btn btn-info btn-sm w-100">Download Invoice</a>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="lead">You have no orders yet.</p>
+    {% endif %}
+  </div>
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .table-responsive {
+      margin-top: 20px;
+    }
+
+    th, td {
+      text-align: center;
+    }
+
+    .badge {
+      font-size: 0.9em;
+      padding: 8px;
+    }
+
+    .badge-success {
+      background-color: #28a745;
+      color: #fff;
+    }
+
+    .badge-danger {
+      background-color: #dc3545;
+      color: #fff;
+    }
+
+    .badge-info {
+      background-color: #17a2b8;
+      color: #fff;
+    }
+
+    .btn-sm {
+      margin-right: 5px;
+    }
+
+    .lead {
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+{% endblock %}

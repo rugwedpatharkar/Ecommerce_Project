@@ -1,0 +1,20 @@
+{% extends 'accounts/profile.html' %}
+
+{% block profile %}
+
+  <div class="container">
+    <h2>Update UPI ID</h2>
+    <form method="post" action="{% url 'transactions:update_upi_id' upi_id.id %}">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="paymentApp" class="form-label">Payment App</label>
+        <input type="text" class="form-control" id="paymentApp" name="paymentApp" value="{{ upi_id.paymentApp }}" required>
+      </div>
+      <div class="mb-3">
+        <label for="upiId" class="form-label">UPI ID</label>
+        <input type="text" class="form-control" id="upiId" name="upiId" value="{{ upi_id.upiId }}" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Update UPI ID</button>
+    </form>
+  </div>
+{% endblock %}

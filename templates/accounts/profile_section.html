@@ -1,0 +1,46 @@
+{% extends 'accounts/profile.html' %}
+
+{% block profile %}
+  <div class="col-md-9">
+    <div id="profile-section">
+      <h2 class="mb-4">Profile</h2>
+
+      <!-- Profile Card -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4 text-center">
+              {% if user.profile.profile_image %}
+                <img src="{{ user.profile.profile_image.url }}" alt="Profile Image" class="img-fluid rounded-circle mb-3 border border-primary profile-image">
+              {% else %}
+                <!-- Default profile image if no image is set -->
+                <img src="/media/img/profilephoto.png" alt="Default Profile Image" class="img-fluid rounded-circle mb-3 border border-primary profile-image">
+              {% endif %}
+            </div>
+            <div class="col-md-8">
+              <h3 class="card-title text-primary">{{ user.get_full_name }}</h3>
+              <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
+              <p class="card-text"><strong>Contact Number:</strong> {{ user.profile.contact_number }}</p>
+             
+
+              <!-- Display Associated Addresses -->
+              <h5 class="card-title mt-4">Shipping Addresses</h5>
+              {% for address in user.profile.addresses.all %}
+                <address>
+                  {{ address.address_line1 }}<br>
+                  {{ address.address_line2 }}<br>
+                  {{ address.city }}, {{ address.state }}<br>
+                  {{ address.postal_code }}<br>
+                  {{ address.country }}
+                </address>
+                <hr>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+     
+    </div>
+  </div>
+{% endblock %}

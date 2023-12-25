@@ -1,0 +1,72 @@
+{% extends 'base/base.html' %}
+
+{% block start %}
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar with Cards -->
+      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar w-25">
+        <div class="position-sticky">
+          <ul class="nav flex-column">
+            <!-- Your Orders Card -->
+            <li class="nav-item">
+              <a class="nav-link" href="/transactions/view-orders/">
+                <div class="card ">
+                  <div class="card-body text-center">
+                    <img src="/media/img/box.jpg" class="card-img-top" alt="Your Orders" style="max-height: 60px; max-width:60px">
+                    <h5 class="card-title h5">Your Orders</h5>
+                    <p class="card-text">Check, return, or buy things again</p>
+                  </div>
+                </div>
+              </a>
+            </li>
+
+            <!-- Login & Security Card -->
+            <li class="nav-item">
+              <a class="nav-link" href="/accounts/profile_update">
+                <div class="card ">
+                  <div class="card-body text-center">
+                    <img src="/media/img/lock.png" class="card-img-top" alt="Login & Security" style="max-height: 60px; max-width:60px">
+                    <h5 class="card-title h5">Login & Security</h5>
+                    <p class="card-text">Edit email, password, name, and mobile number</p>
+                  </div>
+                </div>
+              </a>
+            </li>
+
+            <!-- Your Addresses Card -->
+            <li class="nav-item">
+              <a class="nav-link" href="/accounts/add_address">
+                <div class="card ">
+                  <div class="card-body text-center">
+                    <img src="/media/img/address.png" class="card-img-top" alt="Your Addresses" style="max-height: 60px; max-width:60px">
+                    <h5 class="card-title h5">Your Addresses</h5>
+                    <p class="card-text">Edit addresses for orders</p>
+                  </div>
+                </div>
+              </a>
+            </li>
+
+            <!-- Payment Options Card -->
+            <li class="nav-item">
+              <a class="nav-link" href="/transactions/payment-options/">
+                <div class="card ">
+                  <div class="card-body text-center">
+                    <img src="/media/img/payment.png" class="card-img-top" alt="Payment Options" style="max-height: 60px; max-width:60px">
+                    <h5 class="card-title h5">Payment Options</h5>
+                    <p class="card-text">Edit or add payment methods</p>
+                  </div>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- Main Content Area -->
+      <main class="col-md-9  col-lg-8 px-md-8">
+        {% block profile %}
+{%endblock%}
+      </main>
+    </div>
+  </div>
+{% endblock %}

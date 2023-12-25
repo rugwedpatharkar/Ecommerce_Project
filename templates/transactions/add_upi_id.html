@@ -1,0 +1,22 @@
+{% extends 'accounts/profile.html' %}
+{% include "base/alert.html" %}
+
+{% block profile %}
+
+  <div class="container">
+    <h2>Add UPI ID</h2>
+    <form method="post" action="{% url 'transactions:add_upi_id' %}">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="paymentApp" class="form-label">Payment App</label>
+        <input type="text" class="form-control" id="paymentApp" name="paymentApp" required>
+      </div>
+      <div class="mb-3">
+        <label for="upiId" class="form-label">UPI ID</label>
+        <input type="text" class="form-control" id="upiId" name="upiId" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Add UPI ID</button>
+    </form>
+  </div>
+{% endblock %}
+

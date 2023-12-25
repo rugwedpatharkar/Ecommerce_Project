@@ -1,0 +1,33 @@
+{% extends 'accounts/profile.html' %}
+
+{% block profile %}
+  <div class="container">
+    <h2>Add Card</h2>
+    <form method="post" action="{% url 'transactions:add_card' %}">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="cardtype" class="form-label">Card Type</label>
+        <input type="text" class="form-control" id="cardtype" name="cardtype" required>
+      </div>
+      <div class="mb-3">
+        <label for="name_on_card" class="form-label">Name on Card</label>
+        <input type="text" class="form-control" id="name_on_card" name="name_on_card" required>
+      </div>
+      <div class="mb-3">
+        <label for="card_number" class="form-label">Card Number</label>
+        <input type="text" class="form-control" id="card_number" name="card_number" required>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="exp_month" class="form-label">Expiration Month</label>
+          <input type="number" class="form-control" id="exp_month" name="exp_month" min="1" max="12" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="exp_year" class="form-label">Expiration Year</label>
+          <input type="number" class="form-control" id="exp_year" name="exp_year" min="{% now 'Y' %}" required>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Add Card</button>
+    </form>
+  </div>
+{% endblock %}

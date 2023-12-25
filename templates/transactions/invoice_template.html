@@ -1,0 +1,98 @@
+<!-- transactions/invoice_template.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size:18px
+        }
+
+        #invoice-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #user-details,
+        #product-details,
+        #payment-details {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        #footer {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="invoice-header">
+        <h1>Invoice</h1>
+        <p>Order #{{ order.id }}</p>
+    </div>
+
+    <!-- User Details -->
+    <div id="user-details">
+        <h2>User Details</h2>
+        <p>User: {{ order.profile.user.first_name }} {{ order.profile.user.last_name }}</p>
+        <p>Email: {{ order.profile.user.email }}</p>
+        <p>Address: {{ order.address.address_line1 }}, {{ order.address.city }}, {{ order.address.state }} - {{ order.address.postal_code }}</p>
+        <p>Phone Number: {{ order.profile.phone_number }}</p>
+    </div>
+
+    <!-- Product Details -->
+    <div id="product-details">
+        <h2>Product Details</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ order.product.title }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>₹ {{ order.unit_price }}</td>
+                    <td>₹ {{ order.total_price|floatformat:2 }}</td>
+                </tr>
+                <!-- Add more rows for additional products if needed -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Payment Details -->
+    <div id="payment-details">
+        <h2>Payment Details</h2>
+        <p>Payment Status: {{ order.get_payment_status_display }}</p>
+        <!-- Add more payment-related details if needed -->
+    </div>
+
+    <!-- Customize the appearance of the invoice as needed -->
+
+    <div id="footer">
+        <p>Thank you for your purchase!</p>
+    </div>
+</body>
+</html>

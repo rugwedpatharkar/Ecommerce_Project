@@ -1,0 +1,104 @@
+<!-- transactions/payment_options.html -->
+
+{% extends 'accounts/profile.html' %}
+
+{% block profile %}
+  <div class="container-fluid mt-5">
+    <h2>Payment Options</h2>
+
+    <div class="row">
+      <!-- Add Card Section -->
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-body text-center">
+            <h5 class="card-title">Add Card</h5>
+            <p class="card-text">Link a new card to your account</p>
+            <a href="{% url 'transactions:add_card' %}" class="btn btn-primary">Add Card</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add UPI ID Section -->
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-body text-center">
+            <h5 class="card-title">Add UPI ID</h5>
+            <p class="card-text">Link a new UPI ID to your account</p>
+            <a href="{% url 'transactions:add_upi_id' %}" class="btn btn-primary">Add UPI ID</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Display Added Cards -->
+      <div class="col-md-6 mb-4">
+        <h3>Your Cards:</h3>
+         {% for card in payment_options.cards.all %}
+          <div class="card virtual-card">
+            <div class="card-body text-center">
+              <h5 class="card-title">Card Details</h5>
+              <p class="card-text">Card Number: {{ card.card_number }}</p>
+              <p class="card-text">Expiry: {{ card.exp_month }}/{{ card.exp_year }}</p>
+              <p class="card-text">Name on Card: {{ card.name_on_card }}</p>
+              <!-- Add more details as needed -->
+              <a href="{% url 'transactions:update_card' card.id %}" class="btn btn-secondary float-left">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                  <path d="M11.697 0.303c-0.39-0.391-1.022-0.391-1.414 0l-9 9L0 10l9-9L11.697 0.303zM15 3.998c0-0.553-0.447-1-1-1s-1 0.447-1 1c0 0.554 0.447 1 1 1s1-0.446 1-1zM1.002 13.998l-0.001-2 2 2h-2v-2zM14.002 2l1 1-9 9h-2l-1 1v-2l9-9h2z"/>
+                </svg> Edit
+              </a>
+              <a href="{% url 'transactions:delete_card' card.id %}" class="btn btn-danger float-right">
+                Delete
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                  <path d="M2 1.5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2V2h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V2.5zM1 5v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5H1zm4 1h2v8H5V6zm4 0h2v8H9V6z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+       
+      {% endfor %}
+      </div>
+
+      <!-- Display Added UPI IDs -->
+      <div class="col-md-6 mb-4">
+        <h3>Your UPI IDs:</h3>
+        {% for upi_id in payment_options.upiIDs.all %}
+          <div class="card virtual-card">
+            <div class="card-body text-center">
+              <h5 class="card-title">UPI ID Details</h5>
+              <p class="card-text">Payment App: {{ upi_id.paymentApp }}</p>
+              <p class="card-text">UPI ID: {{ upi_id.upiId }}</p>
+              <!-- Add more details as needed -->
+              <a href="{% url 'transactions:update_upi_id' upi_id.id %}" class="btn btn-secondary float-left">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                  <path d="M11.697 0.303c-0.39-0.391-1.022-0.391-1.414 0l-9 9L0 10l9-9L11.697 0.303zM15 3.998c0-0.553-0.447-1-1-1s-1 0.447-1 1c0 0.554 0.447 1 1 1s1-0.446 1-1zM1.002 13.998l-0.001-2 2 2h-2v-2zM14.002 2l1 1-9 9h-2l-1 1v-2l9-9h2z"/>
+                </svg> Edit
+              </a>
+              <a href="{% url 'transactions:delete_upi_id' upi_id.id %}" class="btn btn-danger float-right">
+                Delete
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                  <path d="M2 1.5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2V2h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V2.5zM1 5v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5H1zm4 1h2v8H5V6zm4 0h2v8H9V6z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        
+      {% endfor %}
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Styles -->
+  <style>
+    .virtual-card {
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      margin-bottom: 10px;
+    }
+
+    .float-right {
+      float: right;
+    }
+  </style>
+{% endblock %}

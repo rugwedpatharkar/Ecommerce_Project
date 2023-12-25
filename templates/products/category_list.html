@@ -1,0 +1,49 @@
+<!-- products/templates/products/category_list.html -->
+
+{% extends 'base/base.html' %}
+
+{% block start %}
+  <div class="container-fluid mt-6">
+    <h2 class="mb-4">Categories</h2>
+    <div class="row">
+      {% for category in categories %}
+        <div class="col-md-2 mb-2">
+          <div class="card">
+            <a href="{% url 'category_product_list' category_slug=category.slug %}" class="text-decoration-none text-dark">
+              <img src="{{ category.category_image.url }}" class="card-img-top" alt="{{ category.category_name }}">
+              <div class="card-body">
+                <h5 class="card-title">{{ category.category_name }}</h5>
+              </div>
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block styles %}
+  {{ block.super }}
+  <style>
+    .card {
+      transition: transform 0.3s ease;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-img-top {
+      max-height: 200px;
+      object-fit: cover;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      margin-bottom: 0;
+    }
+  </style>
+{% endblock %}

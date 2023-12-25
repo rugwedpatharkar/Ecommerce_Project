@@ -1,0 +1,20 @@
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-dismissible fade show alert-{% if message.tags %}{{ message.tags }}{% endif %}" role="alert" id="autoCloseAlert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <script>
+      // Auto-close the alert after 5 seconds (5000 milliseconds)
+      setTimeout(function() {
+        var autoCloseAlert = document.getElementById('autoCloseAlert');
+        if (autoCloseAlert) {
+          autoCloseAlert.classList.add('hide'); // Use a class to hide the alert, or you can use autoCloseAlert.style.display = 'none';
+        }
+      }, 5000); // 5000 milliseconds = 5 seconds
+    </script>
+  {% endfor %}
+{% endif %}
