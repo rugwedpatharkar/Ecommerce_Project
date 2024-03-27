@@ -1,0 +1,84 @@
+<!-- payment.html -->
+{% extends 'base/base.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block start %}
+<style>
+  /* Custom CSS to disable hover animation */
+  .card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+</style>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <h1 class="card-title text-center">Razorpay Payment Form</h1>
+          <form id="payment-form" action="{% url 'transactions:payment_success' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="amount">Total Amount (in INR):</label>
+              <input type="text" id="amount" name="amount" class="form-control" value="{{ amount }}" required readonly>
+            </div>
+            <!-- Display selected items -->
+            <h2 class="text-center">Selected Items:</h2>
+            <div class="row">
+              {% for item in temp_cart_items %}
+              <div class="col-md-4 mb-3">
+                <div class="card">
+                  <img src="{{ item.image }}" class="card-img-top" alt="{{ item.title }}">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ item.title }}</h5>
+                    <p class="card-text">Quantity: {{ item.quantity }}</p>
+                    <p class="card-text">Total Price: ₹{{ item.total_price }}</p>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            <button type="button" class="btn btn-primary btn-block" id="rzp-button1">Pay Now</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var options = {
+        "key": "{{ key }}", 
+        "amount": "{{ amount }}",
+        "currency": "{{ currency }}",
+        "name": "{{ name }}",
+        "description": "{{ description }}",
+        "image": "{{ image }}",
+        "order_id": "{{ order_id }}",
+        "prefill": {
+            "name": "{{ name }}",
+            "email": "{{ email }}",
+            "contact": "{{ contact }}"
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        },
+        "handler": function(response) {
+            document.getElementById('payment-form').submit();
+        }
+    };
+    var rzp1 = new Razorpay(options);
+
+    document.getElementById('rzp-button1').addEventListener('click', function(e) {
+        rzp1.open();
+        e.preventDefault();
+    });
+});
+</script>
+{% endblock %}

@@ -1,7 +1,9 @@
+import time
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
-from .models import LikedItem, CartItem, PaymentOptions, Card, UpiID, OrderedItem
+from django.urls import reverse
+from .models import LikedItem, CartItem, PaymentOptions, Card, UpiID, OrderedItem, Address
 from ecommerce_project_products.models import Product
 from ecommerce_project_accounts.models import Address
 from django.contrib import messages
@@ -13,6 +15,13 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from io import BytesIO
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import razorpay
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseBadRequest, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+import json
+import razorpay
 
 
 
@@ -223,7 +232,7 @@ def order_items(request):
     return render(request, 'transactions/order_items.html', context)
 
 
-@transaction.atomic
+
 def place_order(request):
     if request.method == 'POST':
         cart_item_ids = request.POST.getlist('cart_item_id')
@@ -233,30 +242,117 @@ def place_order(request):
         selected_shipping_address_id = int(selected_shipping_address_id) if selected_shipping_address_id else None
         total_amount = 0
         cart_items = CartItem.objects.get_non_removed_items(request.user.profile)
-        
+
         if not cart_items:
             messages.warning(request, 'Your cart is empty. Please add items to your cart before placing an order.')
             return redirect('transactions:view_cart')
-        
+
         selected_shipping_address = get_object_or_404(Address, id=selected_shipping_address_id)
-        
+        temp_cart_items = []
+
         for cart_item_id, quantity in zip(cart_item_ids, quantities):
             cart_item = get_object_or_404(CartItem, id=cart_item_id, profile=request.user.profile)
             total_amount += cart_item.product.price * int(quantity)
-            
-            # Check if there is sufficient stock
+
             if cart_item.product.stock < int(quantity):
                 messages.error(request, f'Not enough stock available for {cart_item.product.title}. Please update your quantity.')
                 return redirect('transactions:view_cart')
 
-            # Update stock quantity
             cart_item.product.stock -= int(quantity)
             cart_item.product.save()
 
+            temp_cart_items.append({
+                'id': cart_item.id,
+                'title': cart_item.product.title,
+                'image': cart_item.product.image.url,
+                'quantity': int(quantity),
+                'total_price': cart_item.product.price * int(quantity),
+            })
+
+        if selected_payment_option == 'paid':
+            request.session['temp_cart_items'] = temp_cart_items
+            request.session['selected_payment_option'] = selected_payment_option
+
+            user = request.user
+            user_email = user.email
+            user_name = user.get_full_name()
+            user_contact = user.profile.contact_number
+            amount = int(total_amount * 100)
+            client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
+            payment_data = {
+                "amount": amount,
+                "currency": "INR",
+                "receipt": "order_receipt",
+                "notes": {
+                    "email": user_email,
+                },
+            }
+            order = client.order.create(data=payment_data)
+            request.session['order_id'] = order['id']
+            request.session['total_amount'] = total_amount
+            request.session['selected_shipping_address'] = selected_shipping_address_id
+
+            return render(request, 'transactions/payment.html', {
+                'order_id': order['id'],
+                'amount': total_amount,
+                'currency': "INR",
+                'key': settings.RAZORPAY_API_KEY,
+                'name': 'GadgetGalaxy',
+                'description': 'Payment for Your Product',
+                'image': '/media/img/favicon.ico',
+                'email': user_email,
+                'name': user_name,
+                'contact': user_contact,
+                'temp_cart_items': temp_cart_items,
+            })
+        else:
+            for cart_item_data in temp_cart_items:
+                cart_item_id = cart_item_data['id']
+                quantity = cart_item_data['quantity']
+                cart_item = get_object_or_404(CartItem, id=cart_item_id)
+                OrderedItem.objects.create(
+                    profile=request.user.profile,
+                    product=cart_item.product,
+                    quantity=quantity,
+                    item_total=cart_item.product.price * int(quantity),
+                    address=selected_shipping_address,
+                    status='pending',
+                    payment_status=selected_payment_option,
+                    unit_price=cart_item.product.price,
+                    total_price=cart_item.product.price * int(quantity),
+                    cart_item=cart_item,
+                )
+                cart_item.delete()
+
+            messages.success(request, f'Order placed successfully! Total Amount: ₹{total_amount}')
+            return redirect('transactions:view_orders')
+    else:
+        messages.error(request, 'Invalid request method.')
+        return redirect('transactions:view_cart')
+
+@csrf_exempt
+def payment_success(request):
+    if request.method == 'POST':
+        selected_shipping_address_id = request.session.get('selected_shipping_address')
+        selected_payment_option = request.session.get('selected_payment_option')
+
+        if selected_shipping_address_id is None or selected_payment_option is None:
+            return HttpResponseBadRequest("Missing session data")
+
+        selected_shipping_address = get_object_or_404(Address, id=selected_shipping_address_id)
+
+        temp_cart_items = request.session.pop('temp_cart_items', None)
+        if not temp_cart_items:
+            return HttpResponseBadRequest("Missing 'temp_cart_items' data")
+
+        for cart_item_data in temp_cart_items:
+            cart_item_id = cart_item_data['id']
+            quantity = cart_item_data['quantity']
+            cart_item = get_object_or_404(CartItem, id=cart_item_id, profile=request.user.profile)
             OrderedItem.objects.create(
                 profile=request.user.profile,
                 product=cart_item.product,
-                quantity=quantity,
+                quantity=int(quantity),
                 item_total=cart_item.product.price * int(quantity),
                 address=selected_shipping_address,
                 status='pending',
@@ -266,12 +362,23 @@ def place_order(request):
                 cart_item=cart_item,
             )
             cart_item.delete()
-        
-        messages.success(request, f'Order placed successfully. Total Amount: ₹{total_amount}')
+
+        del request.session['selected_payment_option']
+        del request.session['selected_shipping_address']
+
+        messages.success(request, f'Order placed successfully.')
         return redirect('transactions:view_orders')
+    else:
+        return HttpResponseBadRequest("Invalid request method")
 
 
 
+def view_orders(request):
+    orders = OrderedItem.objects.filter(profile=request.user.profile)
+    context = {'orders': orders}
+    return render(request, 'transactions/view_orders.html', context)
+
+    
 def view_orders(request):
     orders = OrderedItem.objects.filter(profile=request.user.profile)
     context = {'orders': orders}
@@ -284,11 +391,9 @@ def render_to_pdf(template_path, context_dict):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'filename="invoice.pdf"'
 
-    # Encode the HTML content to 'utf-8'
     encoding = 'utf-8'
     html = html.encode(encoding)
 
-    # Create a PDF
     pisa_status = pisa.CreatePDF(html, dest=response, encoding=encoding)
 
     if pisa_status.err:

@@ -160,4 +160,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'demo.mail23409@gmail.com'
 EMAIL_HOST_PASSWORD = 'qhqokmbkomaucjvj'
 
- 
+RAZORPAY_API_KEY = 'rzp_test_qwTn2uj8hTW8Mi'
+RAZORPAY_API_SECRET = 'IyXVzhPPQDIdI8CDCe9JzLs3'
+
+# To Enable Popus in Django or else it will block the payment popup
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"

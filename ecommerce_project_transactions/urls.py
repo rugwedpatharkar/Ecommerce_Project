@@ -12,7 +12,6 @@ from .views import (
 )
 from . import views
 
-
 app_name = 'transactions'
 
 urlpatterns = [
@@ -31,14 +30,10 @@ urlpatterns = [
     path('order-items/', views.order_items, name='order_items'),
     path('place-order/', views.place_order, name='place_order'),
     path('view-orders/', views.view_orders, name='view_orders'),
-    path('view_cart/', view_cart, name='view_cart'),
     path('remove_from_cart/<int:cart_item_id>/', RemoveFromCartView.as_view(), name='remove_from_cart'),
-    path('place_order/', place_order, name='place_order'),
     path('view_orders/', view_orders, name='view_orders'),
     path('download-invoice/<int:order_id>/', download_invoice, name='download_invoice'),
     path('increase_quantity/<int:cart_item_id>/', views.increase_quantity, name='increase_quantity'),
     path('decrease_quantity/<int:cart_item_id>/', views.decrease_quantity, name='decrease_quantity'),
-
-
-
+    path('payment_success/', views.payment_success, name='payment_success'),
 ]

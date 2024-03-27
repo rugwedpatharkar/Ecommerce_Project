@@ -74,13 +74,8 @@
         <div class="form-group">
           <label for="payment_option">Payment Option:</label>
           <select name="payment_option" id="payment_option" class="form-control" required>
-            {% for card in cards %}
-              <option value="{{ card.id }}">Card - {{ card.name_on_card }}</option>
-            {% endfor %}
-            {% for upi_id in upi_ids %}
-              <option value="{{ upi_id.id }}">UPI ID - {{ upi_id.upiId }}</option>
-            {% endfor %}
             <option value="cash_on_delivery">Cash On Delivery</option>
+            <option value="paid">Pay Now</option>
           </select>
         </div>
 
