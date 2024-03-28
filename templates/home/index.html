@@ -1,6 +1,39 @@
 {% extends "base/base.html" %}
 
 {% block start %}
+<!-- Swiper Slider -->
+<div class="swiper-container">
+  <div class="swiper-wrapper">
+    {% for product in products %}
+    <div class="swiper-slide">
+      <div class="product-info">
+        <div class="product-image">
+          <img src="{{ product.image.url }}" alt="Product Image">
+        </div>
+        <div class="product-details">
+          <h2>{{ product.title }}</h2>
+          <a href="{% url 'product_detail' slug=product.slug %}" class="btn btn-primary btn-details">Details</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <!-- Add Pagination -->
+  <div class="swiper-pagination"></div>
+   <button class="swiper-button-prev" aria-label="Previous">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M9.177 12.354a.5.5 0 0 1 0-.708L6.121 8 9.177 4.354a.5.5 0 1 1 .646.646l-3 3a.5.5 0 0 1 0 .708l3 3a.5.5 0 0 1-.646.001z"/>
+    </svg>
+  </button>
+  
+  <!-- Next Button -->
+  <button class="swiper-button-next" aria-label="Next">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M6.823 12.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .646.646L7.646 8l2.823 2.646a.5.5 0 1 1-.646.646l-3-3a.5.5 0 0 1 0-.708z"/>
+    </svg>
+  </button>
+</div>
+
 <div class="row row-cols-1  row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-0">
   {% for product in products %}
     <div class="col mb-4 ">
@@ -54,3 +87,5 @@
   </ul>
 </nav>
 {% endblock %}
+
+ 
