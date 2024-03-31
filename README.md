@@ -30,13 +30,14 @@ GadgetGalaxy is an e-commerce platform that specializes in selling electronic ga
     - [7.3 Invoice Download](#73-invoice-download)
   - [8. Views and Templates ](#8-views-and-templates-)
   - [9. Email Notifications ](#9-email-notifications-)
+  - [10. Demo ](#10-demo-)
   - [Conclusion ](#conclusion-)
 
 ## 1. Installation and Setup <a name="installation-and-setup"></a>
 
 The GadgetGalaxy project is built using Django, a high-level Python web framework. To set up the project locally, follow these steps:
 
-- Clone the repository from GitHub link.
+- Clone the repository from [GitHub](https://github.com/rugwedpatharkar/ecommerce_project).
 - Install required dependencies using `pip install -r requirements.txt`.
 - Run migrations to set up the database: `python manage.py migrate`.
 - Create a superuser account: `python manage.py createsuperuser`.
@@ -112,6 +113,10 @@ Django's views and templates are used to render HTML pages and handle user inter
 ## 9. Email Notifications <a name="email-notifications"></a>
 
 Users receive email notifications for account verification, password reset, and order confirmation.
+
+## 10. Demo <a name="demo"></a>
+
+Check out the [demo](https://rugwedpatharkar.pythonanywhere.com/) of GadgetGalaxy.
 
 ## Conclusion <a name="conclusion"></a>
 
